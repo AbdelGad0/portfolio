@@ -10,6 +10,13 @@ export interface UploadResult {
 
 const ALLOWED_EXTENSIONS = [".jpg", ".jpeg", ".png", ".webp", ".gif", ".pdf"];
 const MAX_SIZE = 10 * 1024 * 1024;
+const SUBDIR_PATTERN = /^[a-z0-9_-]{1,64}$/;
+
+function safeSubdir(subdir: string): string {
+  const normalized = subdir.toLowerCase();
+  if (SUBDIR_PATTERN.test(normalized)) return normalized;
+  return "general";
+}
 
 export async function saveFile(
   file: File,
@@ -23,20 +30,21 @@ export async function saveFile(
     throw new Error("File too large (max 10MB)");
   }
 
-  const filename = `${Date.now()}_${file.name.replace(/[^a-zA-Z0-9._-]/g, "_")}`;
+const filename = `${Date.now()}_${file.name.replace(/[^a-zA-Z0-9._-]/g, "_")}`;
+  const safeDir = safeSubdir(subdir);
 
   if (process.env.VERCEL) {
-    const blob = await put(`${subdir}/${filename}`, file, {
+    const blob = await put(`${safeDir}/${filename}`, file, {
       access: "public"
     });
     return { url: blob.url, filename: blob.pathname };
   }
 
-  const uploadDir = path.join(process.cwd(), "public", "uploads", subdir);
+  const uploadDir = path.join(process.cwd(), "public", "uploads", safeDir);
   await fs.mkdir(uploadDir, { recursive: true });
   const buffer = Buffer.from(await file.arrayBuffer());
-  await fs.writeFile(path.join(uploadDir, filename), buffer);
-  return { url: `/uploads/${subdir}/${filename}`, filename };
+await fs.writeFile(path.join(uploadDir, filename), buffer);
+  return { url: `/uploads/${safeDir}/${filename}`, filename };
 }
 
 export async function listFiles(): Promise<{ url: string; filename: string }[]> {

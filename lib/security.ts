@@ -14,6 +14,27 @@ export function sanitizeStringArray(value: unknown, maxItems = 50, maxLength = 2
     .slice(0, maxItems);
 }
 
+function sanitizeValue(value: unknown, maxDepth: number): unknown {
+  if (typeof value === "string") {
+    return sanitizeString(value);
+  }
+  if (typeof value === "number" || typeof value === "boolean") {
+    return value;
+  }
+  if (value === null || value === undefined) {
+    return value;
+  }
+  if (Array.isArray(value)) {
+    return value.slice(0, 100).map((item) =>
+      maxDepth > 0 ? sanitizeValue(item, maxDepth - 1) : item
+    );
+  }
+  if (typeof value === "object") {
+    return maxDepth > 0 ? sanitizeObject(value, maxDepth - 1) : {};
+  }
+  return value;
+}
+
 export function sanitizeObject(
   value: unknown,
   maxDepth = 5
@@ -22,17 +43,7 @@ export function sanitizeObject(
   if (maxDepth <= 0) return {};
   const result: Record<string, unknown> = {};
   for (const [key, val] of Object.entries(value)) {
-    if (typeof val === "string") {
-      result[key] = sanitizeString(val);
-    } else if (typeof val === "number" || typeof val === "boolean") {
-      result[key] = val;
-    } else if (val === null || val === undefined) {
-      result[key] = val;
-    } else if (Array.isArray(val)) {
-      result[key] = val.slice(0, 100);
-    } else if (typeof val === "object") {
-      result[key] = sanitizeObject(val, maxDepth - 1);
-    }
+    result[key] = sanitizeValue(val, maxDepth);
   }
   return result;
 }

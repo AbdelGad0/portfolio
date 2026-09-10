@@ -9,10 +9,11 @@ import { Label } from "@/components/ui/label";
 
 export default function AdminLogin() {
   const router = useRouter();
-  const [username, setUsername] = useState("");
+const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [csrfToken, setCsrfToken] = useState("");
 
   useEffect(() => {
     fetch("/api/auth/me")
@@ -20,6 +21,10 @@ export default function AdminLogin() {
       .then((d) => {
         if (d.authenticated) router.replace("/admin/dashboard");
       })
+      .catch(() => {});
+    fetch("/api/auth/csrf")
+      .then((r) => r.json())
+      .then((d) => setCsrfToken(d.token || ""))
       .catch(() => {});
   }, [router]);
 
@@ -30,7 +35,10 @@ export default function AdminLogin() {
     try {
       const res = await fetch("/api/auth/login", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRF-Token": csrfToken
+        },
         body: JSON.stringify({ username, password })
       });
       if (res.ok) {
@@ -88,7 +96,7 @@ export default function AdminLogin() {
           </div>
         </div>
         {error && <p className="text-sm font-medium text-red-600">{error}</p>}
-        <Button type="submit" className="w-full" disabled={loading}>
+<Button type="submit" className="w-full" disabled={loading || !csrfToken}>
           {loading ? "Signing in..." : "Sign in"}
         </Button>
       </form>

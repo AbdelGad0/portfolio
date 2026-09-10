@@ -11,9 +11,15 @@ export async function GET() {
     return NextResponse.json({ error: "CV not available" }, { status: 404 });
   }
 
-  if (cvFile.startsWith("http")) {
+if (/^https?:\/\//i.test(cvFile)) {
     return NextResponse.redirect(cvFile);
   }
 
-  return NextResponse.redirect(new URL(cvFile, process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"));
+  if (cvFile.startsWith("/") && !cvFile.startsWith("//")) {
+    return NextResponse.redirect(
+      new URL(cvFile, process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000")
+    );
+  }
+
+  return NextResponse.json({ error: "CV not available" }, { status: 404 });
 }

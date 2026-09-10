@@ -1,14 +1,22 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import { useTheme } from "next-themes";
 import { Menu, X, Sun, Moon, Languages } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { cn } from "@/lib/utils";
 
-export function Navbar({ sections }: { sections: { key: string; labelEn: string; labelAr: string }[] }) {
+export function Navbar({
+  sections,
+  logo
+}: {
+  sections: { key: string; labelEn: string; labelAr: string }[];
+  logo?: string;
+}) {
   const { language, toggleLanguage, t } = useLanguage();
   const { resolvedTheme, setTheme } = useTheme();
+  const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -20,6 +28,9 @@ export function Navbar({ sections }: { sections: { key: string; labelEn: string;
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  const sectionHref = (key: string) =>
+    pathname === "/" ? `#${key}` : `/#${key}`;
+
   return (
     <header
       className={cn(
@@ -29,14 +40,19 @@ export function Navbar({ sections }: { sections: { key: string; labelEn: string;
     >
       <div className="mx-auto max-w-7xl px-3 sm:px-6 lg:px-8">
         <div className="flex h-14 items-center justify-between">
-          <a href="/" className="text-base font-semibold tracking-[0.18em] text-foreground">
-            AA
+<a href="/" className="flex items-center text-base font-semibold tracking-[0.18em] text-foreground">
+            {logo ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={logo} alt="Logo" className="h-8 w-8 rounded-full object-cover" />
+            ) : (
+              "AA"
+            )}
           </a>
-          <nav className="hidden items-center gap-1 md:flex">
+<nav className="hidden items-center gap-1 md:flex">
             {sections.map((section) => (
               <a
                 key={section.key}
-                href={`#${section.key}`}
+                href={sectionHref(section.key)}
                 className="rounded-md px-2 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-accent/70 hover:text-foreground"
               >
                 {t(section.labelEn, section.labelAr)}
@@ -73,10 +89,10 @@ export function Navbar({ sections }: { sections: { key: string; labelEn: string;
       {mobileOpen && (
         <div className="border-t bg-background/95 backdrop-blur-md md:hidden">
           <nav className="flex flex-col gap-1 p-4">
-            {sections.map((section) => (
+{sections.map((section) => (
               <a
                 key={section.key}
-                href={`#${section.key}`}
+                href={sectionHref(section.key)}
                 onClick={() => setMobileOpen(false)}
                 className="rounded-md px-2 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
               >

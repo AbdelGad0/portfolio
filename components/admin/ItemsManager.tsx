@@ -14,11 +14,12 @@ import {
   DialogDescription
 } from "@/components/ui/dialog";
 import { ImageUpload } from "./ImageUpload";
+import { ImageArrayUpload } from "./ImageArrayUpload";
 
 export interface FieldDef {
   key: string;
   label: string;
-  type?: "text" | "textarea" | "number" | "boolean" | "select" | "array" | "image";
+  type?: "text" | "textarea" | "number" | "boolean" | "select" | "array" | "image" | "images";
   placeholder?: string;
   options?: string[];
   rows?: number;
@@ -217,10 +218,10 @@ function FieldInput({
   }
   if (field.type === "select") {
     return (
-      <select
+<select
         value={value || ""}
         onChange={(e) => onChange(e.target.value)}
-        className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm"
+        className="flex h-9 w-full rounded-md border border-input bg-card px-3 py-1 text-sm text-foreground"
       >
         {(field.options || []).map((o) => (
           <option key={o} value={o}>
@@ -232,6 +233,9 @@ function FieldInput({
   }
   if (field.type === "array") {
     return <StringArrayInput value={value} onChange={onChange} />;
+  }
+  if (field.type === "images") {
+    return <ImageArrayUpload label={field.label} value={value || []} onChange={onChange} />;
   }
   if (field.type === "image") {
     return <ImageUpload label={field.label} value={value || ""} onChange={onChange} />;

@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import Image from "next/image";
 import { Mail, Download, Github, Linkedin, MessageCircle } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -19,14 +19,14 @@ export function Hero({ profile }: { profile: Profile }) {
         <div className="absolute -top-32 left-1/2 h-[420px] w-[420px] -translate-x-1/2 rounded-full bg-primary/8 blur-[120px]"></div>
       </div>
       <div className="mx-auto max-w-5xl px-4 py-16 text-center sm:px-6 sm:py-20 lg:px-8">
-        <motion.div
+        <m.div
           className="space-y-5"
           initial="hidden"
           animate="show"
           variants={{ hidden: {}, show: { transition: { staggerChildren: 0.1 } } }}
         >
           {d.availableForWork && (
-            <motion.div
+            <m.div
               variants={{ hidden: { opacity: 0, y: 24 }, show: { opacity: 1, y: 0 } }}
               className="flex justify-center"
             >
@@ -34,11 +34,11 @@ export function Hero({ profile }: { profile: Profile }) {
                 <span className="mr-1.5 inline-block h-2 w-2 rounded-full bg-primary"></span>
                 {t(d.availabilityLabelEn || "Available for work", d.availabilityLabelAr || "متاح للعمل")}
               </span>
-            </motion.div>
+            </m.div>
           )}
 
           {d.showProfilePhoto && (
-            <motion.div
+            <m.div
               variants={{ hidden: { opacity: 0, y: 24 }, show: { opacity: 1, y: 0 } }}
               className="flex justify-center"
             >
@@ -55,40 +55,40 @@ export function Hero({ profile }: { profile: Profile }) {
                   />
                 </div>
               </div>
-            </motion.div>
+            </m.div>
           )}
 
-          <motion.p
+          <m.p
             variants={{ hidden: { opacity: 0, y: 24 }, show: { opacity: 1, y: 0 } }}
             className="text-sm font-medium text-muted-foreground"
           >
             {t(d.nameEn, d.nameAr)}
-          </motion.p>
+          </m.p>
 
-          <motion.h1
+          <m.h1
             variants={{ hidden: { opacity: 0, y: 24 }, show: { opacity: 1, y: 0 } }}
             className="mx-auto max-w-3xl text-3xl font-bold tracking-tight sm:text-5xl lg:text-6xl"
           >
             {t(d.headlineEn, d.headlineAr)}
-          </motion.h1>
+          </m.h1>
 
-          <motion.p
+          <m.p
             variants={{ hidden: { opacity: 0, y: 24 }, show: { opacity: 1, y: 0 } }}
             className="text-base font-medium text-foreground/90 sm:text-lg"
           >
             {t(d.titleEn, d.titleAr)}
-          </motion.p>
+          </m.p>
 
           {d.subtitleEn && (
-            <motion.p
+            <m.p
               variants={{ hidden: { opacity: 0, y: 24 }, show: { opacity: 1, y: 0 } }}
               className="mx-auto max-w-2xl text-sm text-muted-foreground sm:text-base"
             >
               {t(d.subtitleEn, d.subtitleAr)}
-            </motion.p>
+            </m.p>
           )}
 
-          <motion.div
+          <m.div
             variants={{ hidden: { opacity: 0, y: 24 }, show: { opacity: 1, y: 0 } }}
             className="flex flex-wrap items-center justify-center gap-2.5 pt-2 sm:gap-3 sm:pt-3"
           >
@@ -107,9 +107,9 @@ export function Hero({ profile }: { profile: Profile }) {
               <Download className="h-4 w-4" />
               {t(d.ctaDownloadCvEn || "Download CV", d.ctaDownloadCvAr || "تحميل السيرة")}
             </a>
-          </motion.div>
+          </m.div>
 
-          <motion.div
+          <m.div
             variants={{ hidden: { opacity: 0, y: 24 }, show: { opacity: 1, y: 0 } }}
             className="flex flex-wrap items-center justify-center gap-2.5 pt-2 sm:gap-3 sm:pt-3"
           >
@@ -131,8 +131,8 @@ export function Hero({ profile }: { profile: Profile }) {
                 <MessageCircle className="h-4 w-4" />
               </a>
             )}
-          </motion.div>
-        </motion.div>
+          </m.div>
+        </m.div>
       </div>
     </section>
   );

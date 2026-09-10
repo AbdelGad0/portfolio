@@ -8,6 +8,9 @@ interface RenderArgs {
   data: any;
   setValue: (key: string, value: any) => void;
   setData: (updater: (prev: any) => any) => void;
+  save: () => Promise<void>;
+  saving: boolean;
+  saved: boolean;
 }
 
 interface SingleFormProps {
@@ -15,9 +18,10 @@ interface SingleFormProps {
   apiPath: string;
   children: React.ReactNode | ((args: RenderArgs) => React.ReactNode);
   onSaved?: (data: any) => void;
+  headerActions?: (args: RenderArgs) => React.ReactNode;
 }
 
-export function SingleForm({ title, apiPath, children, onSaved }: SingleFormProps) {
+export function SingleForm({ title, apiPath, children, onSaved, headerActions }: SingleFormProps) {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [data, setData] = useState<any>(null);
@@ -73,13 +77,16 @@ export function SingleForm({ title, apiPath, children, onSaved }: SingleFormProp
               <CheckCircle2 className="h-4 w-4" /> Saved
             </span>
           )}
+          {headerActions?.({ data, setValue, setData, save: handleSave, saving, saved: savedMsg })}
           <Button onClick={handleSave} disabled={saving}>
             {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
             Save
           </Button>
         </div>
       </div>
-      {typeof children === "function" ? children({ data, setValue, setData }) : children}
+      {typeof children === "function"
+        ? children({ data, setValue, setData, save: handleSave, saving, saved: savedMsg })
+        : children}
     </div>
   );
 }

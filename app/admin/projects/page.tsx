@@ -15,7 +15,8 @@ const fields: FieldDef[] = [
   { key: "modelUsed", label: "Model used" },
   { key: "tools", label: "Tools (comma separated)", type: "array", full: true },
   { key: "evaluationMetrics", label: "Metrics (comma separated)", type: "array", full: true },
-  { key: "thumbnail", label: "Thumbnail", type: "image" },
+{ key: "thumbnail", label: "Thumbnail", type: "image" },
+  { key: "screenshots", label: "Screenshots", type: "images", full: true },
   { key: "displayOrder", label: "Display order", type: "number" },
   { key: "homepageCategoryOrder", label: "Homepage category order", type: "number" },
   { key: "featuredOnHomepage", label: "Featured on homepage", type: "boolean" },
@@ -25,7 +26,7 @@ const fields: FieldDef[] = [
 const blank = {
   titleEn: "", titleAr: "", slug: "", shortSummaryEn: "", shortSummaryAr: "",
   category: "", githubLink: "", liveDemoLink: "", kaggleLink: "", modelUsed: "",
-  tools: [], evaluationMetrics: [], thumbnail: "", displayOrder: 0,
+  tools: [], evaluationMetrics: [], thumbnail: "", screenshots: [], displayOrder: 0,
   homepageCategoryOrder: 0, featuredOnHomepage: false, visible: true
 };
 

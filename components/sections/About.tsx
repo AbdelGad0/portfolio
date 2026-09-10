@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { useLanguage } from "@/contexts/LanguageContext";
 import type { Profile } from "@/types/content";
 
@@ -13,7 +13,7 @@ export function About({ profile }: { profile: Profile }) {
   return (
     <section id="about" className="themed-section py-10 lg:py-12">
       <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
@@ -44,7 +44,7 @@ export function About({ profile }: { profile: Profile }) {
               </div>
             )}
           </div>
-        </motion.div>
+        </m.div>
       </div>
     </section>
   );

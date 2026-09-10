@@ -1,9 +1,17 @@
 import { SignJWT, jwtVerify } from "jose";
 
-const JWT_SECRET = process.env.JWT_SECRET || "dev_fallback_jwt_secret_portfolio";
+const JWT_SECRET =
+  process.env.JWT_SECRET ||
+  (process.env.NODE_ENV === "production"
+    ? ""
+    : "dev_fallback_jwt_secret_portfolio");
 
 function getSecret(): Uint8Array {
-  return new TextEncoder().encode(JWT_SECRET);
+  const secret = JWT_SECRET;
+  if (!secret) {
+    throw new Error("JWT_SECRET is not configured. Set JWT_SECRET in production.");
+  }
+  return new TextEncoder().encode(secret);
 }
 
 export async function createToken(payload: Record<string, unknown>): Promise<string> {

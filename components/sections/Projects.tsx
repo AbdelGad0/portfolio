@@ -1,6 +1,8 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
+import Link from "next/link";
+import Image from "next/image";
 import { ExternalLink, Github, Folder } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import type { Project } from "@/types/content";
@@ -30,7 +32,7 @@ export function ProjectsSection({
   return (
     <section id="projects" className="themed-section py-10 lg:py-12">
       <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
@@ -53,7 +55,23 @@ export function ProjectsSection({
                       key={project.slug}
                       className="glass-card group flex flex-col rounded-lg border bg-card p-5 shadow-sm transition-colors hover:border-primary/40"
                     >
-                      <div className="flex items-center justify-between">
+                      {project.thumbnail && (
+                        <Link
+                          href={`/projects/${project.slug}`}
+                          aria-label={`View ${project.titleEn || project.slug}`}
+                          className="overflow-hidden rounded-lg border bg-secondary/50"
+                        >
+                          <Image
+                            src={project.thumbnail}
+                            alt={project.titleEn || project.slug}
+                            width={800}
+                            height={450}
+                            sizes="(max-width: 640px) 100vw, 50vw"
+                            className="h-auto w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                          />
+                        </Link>
+                      )}
+                      <div className="mt-4 flex items-center justify-between">
                         <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/15 text-primary">
                           <Folder className="h-4 w-4" />
                         </span>
@@ -82,14 +100,16 @@ export function ProjectsSection({
                           )}
                         </div>
                       </div>
-                      <h4 className="mt-3 font-semibold">
-                        {language === "ar" ? project.titleAr || project.titleEn : project.titleEn}
-                      </h4>
-                      <p className="mt-1.5 flex-1 text-sm text-muted-foreground">
-                        {language === "ar"
-                          ? project.shortSummaryAr || project.shortSummaryEn
-                          : project.shortSummaryEn}
-                      </p>
+                      <Link href={`/projects/${project.slug}`} className="mt-3 flex-1">
+                        <h4 className="font-semibold transition-colors group-hover:text-primary">
+                          {language === "ar" ? project.titleAr || project.titleEn : project.titleEn}
+                        </h4>
+                        <p className="mt-1.5 text-sm text-muted-foreground">
+                          {language === "ar"
+                            ? project.shortSummaryAr || project.shortSummaryEn
+                            : project.shortSummaryEn}
+                        </p>
+                      </Link>
                       <div className="mt-3 flex flex-wrap gap-1.5">
                         {Array.isArray(project.tools) &&
                           project.tools.slice(0, 4).map((tool) => (
@@ -112,7 +132,7 @@ export function ProjectsSection({
               </div>
             ))}
           </div>
-        </motion.div>
+        </m.div>
       </div>
     </section>
   );

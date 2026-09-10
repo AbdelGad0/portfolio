@@ -9,13 +9,14 @@ import {
   Briefcase,
   GraduationCap,
   Award,
-  Settings as SettingsIcon,
+Settings as SettingsIcon,
   Palette,
   Github,
   MessageSquare,
   Images,
   BarChart3,
-  Layers
+  Layers,
+  Shield
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -51,8 +52,9 @@ export function Sidebar() {
     {
       title: "Configuration",
       items: [
-        { href: "/admin/theme", label: "Theme & Branding", icon: Palette },
-        { href: "/admin/settings", label: "Settings", icon: SettingsIcon }
+{ href: "/admin/theme", label: "Theme & Branding", icon: Palette },
+        { href: "/admin/settings", label: "Settings", icon: SettingsIcon },
+        { href: "/admin/security", label: "Security", icon: Shield }
       ]
     }
   ];

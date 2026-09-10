@@ -5,7 +5,23 @@ import { createToken } from "@/lib/auth";
 import { logAuditEvent } from "@/lib/audit-log";
 import { readSanitizedJsonObject, getRequestIp, getUserAgent } from "@/lib/security";
 
+function readCookieValue(cookieHeader: string | null, name: string): string | null {
+  if (!cookieHeader) return null;
+  const match = cookieHeader.match(new RegExp(`(?:^|;\\s*)${name}=([^;]*)`));
+  return match ? decodeURIComponent(match[1]) : null;
+}
+
+function isCsrfValid(request: Request): boolean {
+  const headerToken = request.headers.get("x-csrf-token");
+  const cookieToken = readCookieValue(request.headers.get("cookie"), "portfolio_csrf");
+  return Boolean(headerToken && cookieToken && headerToken === cookieToken);
+}
+
 export async function POST(request: Request) {
+  if (!isCsrfValid(request)) {
+    return NextResponse.json({ error: "Invalid or missing CSRF token" }, { status: 403 });
+  }
+
   await connectToDatabase();
   await ensureAdminCredential();
 

@@ -53,6 +53,16 @@ export async function authenticateAdminCredential(
   return { ok: true, message: "Authenticated" };
 }
 
+export async function verifyAdminCredentialPassword(
+  password: string
+): Promise<boolean> {
+  const credential = await AdminCredential.findOne()
+    .select("passwordHash")
+    .lean<{ passwordHash?: string }>();
+  if (!credential?.passwordHash || !password) return false;
+  return bcrypt.compare(password, credential.passwordHash);
+}
+
 export async function updateAdminCredential(
   username: string,
   password: string
@@ -66,6 +76,7 @@ export async function updateAdminCredential(
 }
 
 export async function ensureAdminCredential(): Promise<void> {
+  if (process.env.NODE_ENV === "production") return;
   const existing = await AdminCredential.countDocuments();
   if (existing === 0) {
     const passwordHash = await bcrypt.hash("changeme123", 12);

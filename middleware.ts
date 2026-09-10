@@ -2,7 +2,11 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { jwtVerify } from "jose";
 
-const JWT_SECRET = process.env.JWT_SECRET || "dev_fallback_jwt_secret_portfolio";
+const JWT_SECRET =
+  process.env.JWT_SECRET ||
+  (process.env.NODE_ENV === "production"
+    ? ""
+    : "dev_fallback_jwt_secret_portfolio");
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;

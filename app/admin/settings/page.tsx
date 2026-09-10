@@ -52,7 +52,10 @@ export default function SettingsAdminPage() {
                 <div className="grid gap-4 sm:grid-cols-2">
                   <BilingualField label="Site title" valueEn={data.siteTitleEn} valueAr={data.siteTitleAr} onChangeEn={(v) => setValue("siteTitleEn", v)} onChangeAr={(v) => setValue("siteTitleAr", v)} />
                   <BilingualField label="Site name" valueEn={data.siteNameEn} valueAr={data.siteNameAr} onChangeEn={(v) => setValue("siteNameEn", v)} onChangeAr={(v) => setValue("siteNameAr", v)} />
-                  <BilingualField full label="Meta description" type="textarea" rows={2} valueEn={data.defaultMetaDescriptionEn} valueAr={data.defaultMetaDescriptionAr} onChangeEn={(v) => setValue("defaultMetaDescriptionEn", v)} onChangeAr={(v) => setValue("defaultMetaDescriptionAr", v)} />
+<BilingualField full label="Meta description" type="textarea" rows={2} valueEn={data.defaultMetaDescriptionEn} valueAr={data.defaultMetaDescriptionAr} onChangeEn={(v) => setValue("defaultMetaDescriptionEn", v)} onChangeAr={(v) => setValue("defaultMetaDescriptionAr", v)} />
+                  <div className="sm:col-span-2">
+                    <ImageUpload label="Favicon / site logo (browser tab icon)" value={data.favicon || ""} onChange={(v) => setValue("favicon", v)} accept="image/*" />
+                  </div>
                 </div>
               </section>
 
@@ -61,21 +64,21 @@ export default function SettingsAdminPage() {
                 <div className="grid gap-4 sm:grid-cols-3">
                   <div className="space-y-1.5">
                     <Label>Default theme</Label>
-                    <select value={data.defaultTheme || "dark"} onChange={(e) => setValue("defaultTheme", e.target.value)} className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm">
+                    <select value={data.defaultTheme || "dark"} onChange={(e) => setValue("defaultTheme", e.target.value)} className="flex h-9 w-full rounded-md border border-input bg-card px-3 py-1 text-sm text-foreground">
                       <option value="dark">Dark</option>
                       <option value="light">Light</option>
                     </select>
                   </div>
                   <div className="space-y-1.5">
                     <Label>Default language</Label>
-                    <select value={data.defaultLanguage || "en"} onChange={(e) => setValue("defaultLanguage", e.target.value)} className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm">
+                    <select value={data.defaultLanguage || "en"} onChange={(e) => setValue("defaultLanguage", e.target.value)} className="flex h-9 w-full rounded-md border border-input bg-card px-3 py-1 text-sm text-foreground">
                       <option value="en">English</option>
                       <option value="ar">العربية</option>
                     </select>
                   </div>
                   <div className="space-y-1.5">
                     <Label>Projects display mode</Label>
-                    <select value={data.projectsDisplayMode || "grouped"} onChange={(e) => setValue("projectsDisplayMode", e.target.value)} className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm">
+                    <select value={data.projectsDisplayMode || "grouped"} onChange={(e) => setValue("projectsDisplayMode", e.target.value)} className="flex h-9 w-full rounded-md border border-input bg-card px-3 py-1 text-sm text-foreground">
                       <option value="grouped">Grouped by category</option>
                       <option value="selected">Selected / highlighted</option>
                     </select>

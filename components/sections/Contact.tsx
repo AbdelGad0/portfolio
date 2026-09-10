@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { Mail, MapPin, Phone, Send } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import type { Profile } from "@/types/content";
@@ -39,7 +39,7 @@ export function ContactSection({ profile }: { profile: Profile }) {
   return (
     <section id="contact" className="themed-section py-10 lg:py-12">
       <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
@@ -49,7 +49,7 @@ export function ContactSection({ profile }: { profile: Profile }) {
             {t("Contact", "تواصل")}
           </p>
           <h2 className="mt-1 text-2xl font-bold tracking-tight sm:text-3xl">
-            {t("Let&apos;s work together", "لنعمل معاً")}
+            {t("Let's work together", "لنعمل معاً")}
           </h2>
 
           <div className="mt-8 grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
@@ -136,7 +136,7 @@ export function ContactSection({ profile }: { profile: Profile }) {
               )}
             </form>
           </div>
-        </motion.div>
+        </m.div>
       </div>
     </section>
   );

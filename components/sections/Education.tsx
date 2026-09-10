@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { GraduationCap } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import type { Education } from "@/types/content";
@@ -11,7 +11,7 @@ export function EducationSection({ items }: { items: Education[] }) {
   return (
     <section id="education" className="themed-section py-10 lg:py-12">
       <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
@@ -54,7 +54,7 @@ export function EducationSection({ items }: { items: Education[] }) {
               </div>
             ))}
           </div>
-        </motion.div>
+        </m.div>
       </div>
     </section>
   );

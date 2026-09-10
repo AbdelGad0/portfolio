@@ -1,7 +1,7 @@
 "use client";
 
 import { ThemeProvider } from "next-themes";
-import { MotionConfig } from "framer-motion";
+import { MotionConfig, LazyMotion, domMax } from "framer-motion";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 
 export function Providers({
@@ -19,8 +19,10 @@ export function Providers({
       storageKey="theme"
       disableTransitionOnChange
     >
-      <MotionConfig reducedMotion="user">
-        <LanguageProvider defaultLanguage={defaultLanguage}>{children}</LanguageProvider>
+<MotionConfig reducedMotion="user">
+        <LazyMotion features={domMax} strict>
+          <LanguageProvider defaultLanguage={defaultLanguage}>{children}</LanguageProvider>
+        </LazyMotion>
       </MotionConfig>
     </ThemeProvider>
   );

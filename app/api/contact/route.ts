@@ -1,7 +1,13 @@
 import { NextResponse } from "next/server";
 import { connectToDatabase } from "@/lib/mongodb";
 import Message from "@/models/Message";
-import { readSanitizedJsonObject } from "@/lib/security";
+import { readSanitizedJsonObject, getRequestIp } from "@/lib/security";
+import { sendContactEmail } from "@/lib/mail";
+
+const IP_LIMIT = 5;
+const IP_WINDOW_MS = 60 * 60 * 1000;
+const EMAIL_LIMIT = 3;
+const EMAIL_WINDOW_MS = 24 * 60 * 60 * 1000;
 
 export async function POST(request: Request) {
   await connectToDatabase();
@@ -24,6 +30,33 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Invalid email address" }, { status: 400 });
   }
 
-  await Message.create({ name, email, subject, message });
+  const ip = getRequestIp(request);
+  const [ipCount, emailCount] = await Promise.all([
+    Message.countDocuments({
+      ipAddress: ip,
+      createdAt: { $gte: new Date(Date.now() - IP_WINDOW_MS) }
+    }),
+    Message.countDocuments({
+      email,
+      createdAt: { $gte: new Date(Date.now() - EMAIL_WINDOW_MS) }
+    })
+  ]);
+
+  if (ipCount >= IP_LIMIT) {
+    return NextResponse.json(
+      { error: "Too many messages from your connection. Please try again later." },
+      { status: 429 }
+    );
+  }
+
+  if (emailCount >= EMAIL_LIMIT) {
+    return NextResponse.json(
+      { error: "Too many messages from this email address. Please try again later." },
+      { status: 429 }
+    );
+  }
+
+  await Message.create({ name, email, subject, message, ipAddress: ip });
+  await sendContactEmail({ name, email, subject, message });
   return NextResponse.json({ ok: true });
 }
