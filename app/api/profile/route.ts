@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { connectToDatabase } from "@/lib/mongodb";
 import Profile from "@/models/Profile";
 import { toPlainObject } from "@/lib/utils";
+import { revalidatePortfolio } from "@/lib/revalidate";
 
 export async function GET() {
   await connectToDatabase();
@@ -18,6 +19,7 @@ export async function PUT(request: Request) {
   } else {
     Object.assign(profile, body);
   }
-  await profile.save();
+await profile.save();
+  await revalidatePortfolio();
   return NextResponse.json({ data: toPlainObject(profile.toObject()) });
 }
